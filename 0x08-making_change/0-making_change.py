@@ -3,7 +3,6 @@
 Change comes from within
 """
 
-
 def makeChange(coins, total):
     """
     Given a pile of coins of different values, determine the fewest
@@ -21,21 +20,14 @@ def makeChange(coins, total):
     if total <= 0:
         return 0
 
-    placeholder = total + 1
-
-    memo = {0: 0}
+    # Initialize the memo array to a large value
+    memo = [total + 1] * (total + 1)
+    memo[0] = 0
 
     for i in range(1, total + 1):
-        memo[i] = placeholder
-
         for coin in coins:
-            current = i - coin
-            if current < 0:
-                continue
+            if i >= coin:
+                memo[i] = min(memo[i], memo[i - coin] + 1)
 
-            memo[i] = min(memo[current] + 1, memo[i])
+    return memo[total] if memo[total] != total + 1 else -1
 
-    if memo[total] == total + 1:
-        return -1
-
-    return memo[total]
